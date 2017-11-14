@@ -1,21 +1,19 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": [
-        "es6",
-        "dom"
-      ],
-      "outDir": "./dist",
-      "strict": true,
-      "noImplicitAny": false,
-      "strictNullChecks": false,
-      "allowSyntheticDefaultImports": true,
-    "exclude": [
-      "node_modules"
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es6"
     ],
-    "formatCodeOptions": {
-    "indentSize": 4,
-    "tabSize": 4
-    }
+    "outDir": "./",
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "formatCodeOptions": {
+  "indentSize": 4,
+  "tabSize": 4
   }
 }

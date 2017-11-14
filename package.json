@@ -1,0 +1,8 @@
+{
+  "name": "object-model-transform",
+  "version": "1.0.0",
+  "description": "Transforms objects and its composition into model.",
+  "main": "index.js",
+  "author": "Dianzel Gulmatico",
+  "license": "MIT"
+}

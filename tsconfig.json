@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "lib": [
+        "es6",
+        "dom"
+      ],
+      "outDir": "./dist",
+      "strict": true,
+      "allowSyntheticDefaultImports": true,
+    "exclude": [
+      "node_modules"
+    ],
+    "formatCodeOptions": {
+    "indentSize": 4,
+    "tabSize": 4
+    }
+  }
+}

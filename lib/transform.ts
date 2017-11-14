@@ -1,8 +1,8 @@
-export interface IncludeSchema extends ITransformSchema {
+interface IncludeSchema extends ITransformSchema {
     propName: string;
 }
 
-export interface ITransformSchema {
+interface ITransformSchema {
     propName?: string;
     readonly Model?: any; // typeof Model
     readonly include?: IncludeSchema | IncludeSchema[];

@@ -117,18 +117,18 @@ describe('transform', () => {
             Model: Person,
             include: [
                 {
-                    propName: 'pet',
+                    field: 'pet',
                     Model: Animal,
                     include: {
-                        propName: 'collars',
+                        field: 'collars',
                         Model: Item,
                     }
                 },
                 {
-                    propName: 'pocket',
+                    field: 'pocket',
                     Model: Item,
                     include: {
-                        propName: 'money',
+                        field: 'money',
                         Model: Item,
                     },
                 },
@@ -147,7 +147,7 @@ describe('transform', () => {
         expect(res[1].pocket.money).toBeInstanceOf(Item);
     });
 
-    it.only('transform object in a given dot notation property name', () => {
+    it('transform object in a given dot notation property name', () => {
         class Computer extends Model {}
         class Laptop extends Model {};
 
@@ -177,14 +177,14 @@ describe('transform', () => {
         //     Model: Person,
         //     include: [
         //         {
-        //             propName: 'computer.favorite.laptops',
+        //             field: 'computer.favorite.laptops',
         //             Model: Laptop,
         //         },
         //         {
-        //             propName: 'computer.favorite.computer',
+        //             field: 'computer.favorite.computer',
         //             Model: Computer,
         //             include: {
-        //                 propName: 'casing',
+        //                 field: 'casing',
         //                 Model: Item,
         //             },
         //         },
@@ -193,17 +193,17 @@ describe('transform', () => {
         const schema1 = {
             Model: Person,
             include: {
-                propName: 'computer.favorite',
+                field: 'computer.favorite',
                 include: [
                     {
-                        propName: 'laptops',
+                        field: 'laptops',
                         Model: Laptop,
                     },
                     {
-                        propName: 'computer',
+                        field: 'computer',
                         Model: Computer,
                         include: {
-                            propName: 'casing',
+                            field: 'casing',
                             Model: Item,
                         },
                     },

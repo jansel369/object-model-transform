@@ -1,18 +1,18 @@
 
 export interface ITransformSchema {
-    propName?: string;
+    field?: string;
     readonly Model?: any; // typeof Model
     readonly include?: IncludeSchema | IncludeSchema[];
 }
 
 interface IncludeSchema extends ITransformSchema {
-    propName: string;
+    field: string;
 }
 
 export default function transform<T = any>(obj: any, transformSchema: ITransformSchema): T {
     const key = 'key';
 
-    return modelTransform({ [key]: obj }, { ...transformSchema, propName: key })[key];
+    return modelTransform({ [key]: obj }, { ...transformSchema, field: key })[key];
 }
 
 export function modelTransform(dataSource: any | any[], schema: ITransformSchema | ITransformSchema[]): any {
@@ -23,25 +23,25 @@ export function modelTransform(dataSource: any | any[], schema: ITransformSchema
     if (schema instanceof Array) {
         return schema.reduce<object>((prev, schemaElement) => transformObject(prev, dataSource, schemaElement), {}); // returns a multiple transformed props object
     } else {
-        const propNames = schema.propName.split('.');
-        if (!(propNames[0] in dataSource)) {
+        const fields = schema.field.split('.');
+        if (!(fields[0] in dataSource)) {
             return;
         }
 
-        if (propNames.length > 1) { // for dot notation transform
-            const propName = propNames.shift();
-            const data = dataSource[propName];
-            schema.propName = propNames.join('.');
+        if (fields.length > 1) { // for dot notation transform
+            const field = fields.shift();
+            const data = dataSource[field];
+            schema.field = fields.join('.');
 
             return {
-                [propName]: transformObject(data, data, schema),
+                [field]: transformObject(data, data, schema),
             };
         }
 
-        const data = dataSource[schema.propName];
+        const data = dataSource[schema.field];
 
         return {
-            [propNames[0]]: data instanceof Array
+            [fields[0]]: data instanceof Array
                 ? data.map((dataElement) => transformObject(dataElement, dataElement, schema.include, schema.Model))
                 : transformObject(data, data, schema.include, schema.Model),
         };

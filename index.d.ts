@@ -2,11 +2,11 @@ declare function transform<T = any>(obj: any, schema: transform.ITransformSchema
 
 declare namespace transform {
     interface IncludeSchema extends ITransformSchema {
-        propName: string;
+        field: string;
     }
     
     interface ITransformSchema {
-        propName?: string;
+        field?: string;
         readonly Model?: any; // typeof Model
         readonly include?: IncludeSchema | IncludeSchema[];
     }

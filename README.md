@@ -1,4 +1,11 @@
-# API Reference
+## API Reference
+### transform(obj: any, schema: ITransformSchema)
+Recursively transform object into a model by the given schema.
+- `obj` - [required] Any object or array data to transform.
+- `schema` - [required] The schema for transforming objects to Model
+  - `field` - [required for nested transform] The property field you want to transform. Supports dotnotation.
+  - `Model` - [optional] The Model class of the object to transform.
+  - `include` - [optional] A Schema to transform nested objects. Value can be array for multiple fields to transform.
 
 ## Defining a Model
 ```js
@@ -96,22 +103,19 @@
   transformer.transform(nestedObjs, nestedSchema); /* => 
     [
       Person {
-        name: 'Pat',
+        ....
         items: [
           Item {
-            name: '0',
-            color: 'red',
+            ....
           },
           Item {
-            name: '1',
-            color: 'black',
+            ....
           },
         ],
         pet: Animal {
-          name: 'Brench',
-          type: 'dog',
+          ....
           collar: Item {
-            color: 'yello',
+            ....
           },
           makeSount(),
         },
@@ -146,14 +150,14 @@
       tool: {
         type: 'programming',
         laptop: Item {
-          color: 'black',
+          ....
         },
       },
     },
   }
   */
 
-  // 2nd example
+  // with multiple fields to transform
   const dnObj2 = {
     name: 'Brent',
     computer: {
@@ -198,21 +202,21 @@
 
   transformer.transform(dnObj2, dnSchema2); /* => 
     Person {
-      name: 'Brent',
+      ....
       computer: {
         favorite: {
           laptops: [
             Laptop {
-              brand: 'dell',
+              ....
             },
             Laptop {
-              brand: 'asus',
+              ....
             }
           ],
           computer: Computer {
-            brand: 'mansanas',
+            ....
             casing: Item {
-              material: 'titanium',
+              ....
             }
           },
         },
@@ -220,12 +224,3 @@
     };
   */
 ```
-
-## API Reference
-### transform(obj: any, schema: ITransformSchema)
-Recursively transform object into a model by the given schema.
-- `obj' - [required] Any object or array data to transform.
-- `schema` - [required] The schema for transforming objects to Model
-  - `field` - [required for nested transform] The property field you want to transform. Supports dotnotation.
-  - `Model - [optional] The Model class of the object to transform.
-  - include - [optional] A Schema to transform nested objects. Value can be array for multiple fields to transform.

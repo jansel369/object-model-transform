@@ -3,7 +3,7 @@
 Recursively transform object into a model by the given schema.
 - `obj` - [required] Any object or array data to transform.
 - `schema` - [required] The schema for transforming objects to Model
-  - `field` - [required for nested transform] The property field you want to transform. Supports dotnotation.
+  - `field` - [required for nested schema] The property field you want to transform. Supports dotnotation.
   - `Model` - [optional] The Model class of the object to transform.
   - `include` - [optional] A Schema to transform nested objects. Value can be array for multiple fields to transform.
 
@@ -145,10 +145,10 @@ Recursively transform object into a model by the given schema.
 
   transformer.transform(dnObj, dnSchema); /* => 
   {
-    name: 'jans',
+    ....
     item: {
       tool: {
-        type: 'programming',
+        ....
         laptop: Item {
           ....
         },

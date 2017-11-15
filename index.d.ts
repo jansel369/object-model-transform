@@ -1,15 +1,21 @@
-declare function transform<T = any>(obj: any, schema: transform.ITransformSchema ): T;
-
-declare namespace transform {
-    interface IncludeSchema extends ITransformSchema {
-        field: string;
-    }
-    
-    interface ITransformSchema {
-        field?: string;
-        readonly Model?: any; // typeof Model
-        readonly include?: IncludeSchema | IncludeSchema[];
-    }
+declare class Model {
+    constructor(obj: any);
 }
 
-export = transform;
+declare function transform<T = any>(obj: any, schema: ITransformSchema ): T;
+
+interface ITransformSchema {
+    field?: string;
+    Model?: any; // typeof Model
+    include?: IncludeSchema | IncludeSchema[];
+}
+
+interface IncludeSchema extends ITransformSchema {
+    field: string;
+}
+
+export { 
+    Model,
+    transform,
+    ITransformSchema,
+}

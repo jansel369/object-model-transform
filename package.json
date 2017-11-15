@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepublish": "tsc -p " 
+    "prepublishOnly": "tsc" 
   },
   "devDependencies": {
     "@types/jest": "^21.1.6",

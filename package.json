@@ -6,6 +6,10 @@
   "author": "Dianzel Gulmatico",
   "license": "MIT",
   "types": "./index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
   "devDependencies": {
     "@types/jest": "^21.1.6",
     "jest": "^21.2.1",

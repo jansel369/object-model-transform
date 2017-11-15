@@ -1,11 +1,12 @@
-interface IncludeSchema extends ITransformSchema {
-    propName: string;
-}
 
-interface ITransformSchema {
+export interface ITransformSchema {
     propName?: string;
     readonly Model?: any; // typeof Model
     readonly include?: IncludeSchema | IncludeSchema[];
+}
+
+interface IncludeSchema extends ITransformSchema {
+    propName: string;
 }
 
 export default function transform<T = any>(obj: any, transformSchema: ITransformSchema): T {
@@ -50,7 +51,7 @@ export function modelTransform(dataSource: any | any[], schema: ITransformSchema
 export function transformObject(data, target, schema: ITransformSchema | ITransformSchema[], Model?) {
     if (target instanceof Object) {
         const object = { ...data, ...modelTransform(target, schema) };
-
+        
         return Model ? new Model(object) : object;
     } else {
         return target;

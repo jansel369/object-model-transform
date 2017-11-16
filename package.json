@@ -6,6 +6,17 @@
   "author": "Dianzel Gulmatico",
   "license": "MIT",
   "types": "./index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jansel369/object-model-transform"
+  },
+  "bugs": {
+    "url": "https://github.com/jansel369/object-model-transform/issues"
+  },
+  "keywords": [
+    "oop",
+    "transformer"
+  ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

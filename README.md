@@ -39,7 +39,7 @@ Recursively transform object into a model by the given schema.
   };
 
   var schema = {
-    model: Person,
+    Model: Person,
   };
 
   transformer.transform(obj, schema); // => Person { name: 'li', age: 32, };
@@ -55,7 +55,7 @@ Recursively transform object into a model by the given schema.
     },
   ];
   
-  transformer.transform(arr, schema) // => [ Person { name: 'Gab', }, Person { name: 'Pauline' }]
+  transformer.transform(arr, schema) // => [Person { name: 'Gab', }, Person { name: 'Pauline' }]
 
   // transforming a nested objects
 

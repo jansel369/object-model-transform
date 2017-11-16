@@ -1,6 +1,6 @@
 {
   "name": "object-model-transform",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Transforms objects and its object property into model.",
   "main": "index.js",
   "author": "Dianzel Gulmatico",

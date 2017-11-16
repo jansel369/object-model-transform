@@ -1,7 +1,7 @@
 ## API Reference
-### transform(obj: any, schema: ITransformSchema)
-Recursively transform object into a model by the given schema.
-- `obj` - [required] Any object or array data to transform.
+### transform(data: any, schema: ITransformSchema)
+Recursively transforms data into a model by the given schema and returns the value.
+- `data` - [required] Any object or array data to transform.
 - `schema` - [required] The schema for transforming objects to Model
   - `field` - [required for nested schema] The property field you want to transform. Supports dotnotation as field value.
   - `Model` - [optional] The Model class of the object to transform.

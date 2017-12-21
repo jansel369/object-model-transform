@@ -6,8 +6,10 @@ declare function transform<T = any>(obj: any, schema: ITransformSchema ): T;
 
 interface ITransformSchema {
     field?: string;
-    Model?: any; // typeof Model
+    Model?: any;
     include?: IncludeSchema | IncludeSchema[];
+    singleParam?: boolean;
+    multiParam?: boolean;
 }
 
 interface IncludeSchema extends ITransformSchema {

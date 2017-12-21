@@ -1,5 +1,5 @@
 import Model from '../lib/Model';
-import transform, { ITransformSchema } from '../lib/transform';
+import transform, { ITransformSchema, modelTransform } from '../lib/transform';
 
 describe('transform', () => {
     class Person extends Model {};
@@ -217,4 +217,66 @@ describe('transform', () => {
         expect(res.computer.favorite.computer).toBeInstanceOf(Computer);
         expect(res.computer.favorite.computer.casing).toBeInstanceOf(Item);
     });
+
+    it('transforms any non object data', () => {
+        class Computer {
+            name: string;
+
+            constructor(name: string) {
+                this.name = name;
+            }
+        }
+
+        class Laptop {
+            name: string;
+            brand: string;
+            weight: number;
+
+            constructor(name: string, brand: string, weight: number) {
+                this.name = name;
+                this.brand = brand;
+                this.weight = weight;
+            }
+        }
+
+        const pc1 = 'pc173';
+        const pc2 = ['pc222', 'brand234', 1];
+        const computerSchema: ITransformSchema = {
+            Model: Computer,
+            singleParam: true,
+        }
+        const laptopSchema: ITransformSchema = {
+            Model: Laptop,
+            multiParam: true,
+        }
+
+        const pcRes1 = transform(pc1, computerSchema);
+        expect(pcRes1).toBeInstanceOf(Computer);
+        expect(pcRes1.name).toBe(pc1);
+
+        const pcRes2 = transform(pc2, laptopSchema);
+        expect(pcRes2).toBeInstanceOf(Laptop);
+        expect(pcRes2.name).toBe(pc2[0]);
+        expect(pcRes2.brand).toBe(pc2[1]);
+        expect(pcRes2.weight).toBe(pc2[2]);
+    });
+
+    it('throws error for having two "singleTransform" and "multiTransform" at the same time', () => {
+        class Computer {
+            name: string;
+
+            constructor(name: string) {
+                this.name = name;
+            }
+        }
+
+        const invalidSchema: ITransformSchema = {
+            multiParam: true,
+            singleParam: true,
+            Model: Computer,
+        }
+
+        expect(() => transform('pc1', invalidSchema)).toThrow();
+    });
 });
+

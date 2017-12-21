@@ -1,8 +1,11 @@
+import OMTError from './OMTError';
 
 export interface ITransformSchema {
     field?: string;
-    readonly Model?: any; // typeof Model
-    readonly include?: IncludeSchema | IncludeSchema[];
+    Model?: any; // typeof Model
+    include?: IncludeSchema | IncludeSchema[];
+    singleParam?: boolean;
+    multiParam?: boolean;
 }
 
 interface IncludeSchema extends ITransformSchema {
@@ -21,7 +24,7 @@ export function modelTransform(dataSource: any | any[], schema: ITransformSchema
     }
 
     if (schema instanceof Array) {
-        return schema.reduce<object>((prev, schemaElement) => transformObject(prev, dataSource, schemaElement), {}); // returns a multiple transformed props object
+        return schema.reduce<object>((prev, schemaElement) => transformObject(prev, dataSource, undefined, schemaElement), {}); // returns a multiple transformed props object
     } else {
         const fields = schema.field.split('.');
         if (!(fields[0] in dataSource)) {
@@ -34,26 +37,48 @@ export function modelTransform(dataSource: any | any[], schema: ITransformSchema
             schema.field = fields.join('.');
 
             return {
-                [field]: transformObject(data, data, schema),
+                [field]: transformObject(data, data, undefined, schema),
             };
         }
 
         const data = dataSource[schema.field];
 
         return {
-            [fields[0]]: data instanceof Array
-                ? data.map((dataElement) => transformObject(dataElement, dataElement, schema.include, schema.Model))
-                : transformObject(data, data, schema.include, schema.Model),
+            [fields[0]]: data instanceof Array && !schema.multiParam
+                ? data.map((dataElement) => transformObject(dataElement, dataElement, schema, schema.include, schema.Model))
+                : transformObject(data, data, schema, schema.include, schema.Model),
         };
     }
 }
 
-export function transformObject(data, target, schema: ITransformSchema | ITransformSchema[], Model?) {
-    if (target instanceof Object) {
-        const object = { ...data, ...modelTransform(target, schema) };
-        
-        return Model ? new Model(object) : object;
-    } else {
-        return target;
+export function transformObject(data, target, schema: ITransformSchema, nextSchema: ITransformSchema | ITransformSchema[], Model?) {
+    if (schema) {
+        if (schema.singleParam && schema.multiParam) {
+            throw new OMTError('Invalid schema: multiple field "singleParam" and "multipleParam" must only be one');
+        }
+    
+        if (schema.singleParam) {
+            return singleParamTransform(target, Model);
+        } else if (schema.multiParam) {
+            return multiParamTransform(target, Model)
+        }
     }
+    
+    if (target instanceof Object) {
+        const object = { ...data, ...modelTransform(target, nextSchema) };
+
+        return Model ? new Model(object) : object;
+    }
+
+    return target;
+}
+
+export function singleParamTransform(target, Model) {
+    return target && Model ? new Model(target) : target;
+}
+
+export function multiParamTransform(target, Model) {
+    return target && Model && target instanceof Array
+        ? new Model(...target)
+        : target;
 }

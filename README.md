@@ -6,6 +6,8 @@ Recursively transforms data into a model by the given schema and returns the val
   - `field` - [required for nested schema] The property field you want to transform. Supports dotnotation as field value.
   - `Model` - [optional] The Model class of the object to transform.
   - `include` - [optional] A Schema to transform nested objects. Value can be array for multiple fields to transform.
+  -  singleParam - [optional] a boolean value to provide a single parameter with any data type for the constructor of any custom model.
+  -  multiParam - [optional] a boolean value to provide multiple parameters for to the constructor of any custom model. Provided data type must be array that contains all the parameters.
 
 ## Defining a Model
 ```js

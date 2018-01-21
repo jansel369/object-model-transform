@@ -51,7 +51,7 @@ Recursively transforms data into a model by the given schema and returns the val
 ```
 
 ### Transforming an array
-```
+```js
   var arr = [
     { name: 'Gab' },
     { name: 'Pauline' },
@@ -62,7 +62,7 @@ Recursively transforms data into a model by the given schema and returns the val
 ```
 
 ### Transforming a nested objects
-```
+```js
   var nestedObjs = [
     {
       name: 'Pat',
@@ -108,8 +108,8 @@ Recursively transforms data into a model by the given schema and returns the val
   */
 ```
 
-### Dotnotaion as a field
-```
+### Basic use of dot notation as a field
+```js
   var dnObj = {
     name: 'jans',
     item: {
@@ -138,8 +138,8 @@ Recursively transforms data into a model by the given schema and returns the val
   }
   */
 ```
-### With multiple fields to transform
-```
+###  For dot notation with multiple fields 
+```js
   var dnObj2 = {
     name: 'Brent',
     computer: {
@@ -188,26 +188,31 @@ Recursively transforms data into a model by the given schema and returns the val
     };
   */
 ```
+
+
+## Controling the data to transform
+
 ### onTrnasform(Model, data, parent, root)
 Customize a model for the provided field.
 - `Model` - The model provided in schema.
-- `data` - The data to transform from the specified field of schema. For nested transformation child object of data are the first to transform.
+- `data` - The data object to transform from the specified field of schema. For nested transformation child object of data are the first to transform.
 - `parent` - The parent object or array of the data.
 - `root` - The root object from nested transformation
 
-```
+```js
  class Person {
+   // constructor that receives custom parameters
    constructor(person, petName) {
      Object.assign(this, person);
      this.petName = petName;
    }
  }
 
-const data = {
-    person: { name: 'Karl', age: 33 },
-    pet: { name: 'Light' },
-  };
-const schema = {
+var data = {
+  person: { name: 'Karl', age: 33 },
+  pet: { name: 'Light' },
+};
+var schema = {
   include: {
     field: 'person',
     Model: Person,
@@ -230,10 +235,10 @@ transformer.transform(data, schema) /*=>
 ```
 
 
-## Models with diffirent parameters
+## Models with different parameters
 
 ### Single parameter
-```
+```js
 
 var timestamp = Date.now;
 // 'singleParam' property to pass any type of single parameter
@@ -245,7 +250,7 @@ transformer.transform(name, schema); /* =>
 ```
 
 ### Multiple Parameter
-```
+```js
 class Laptop {
   constructor(name, brand, weight) {
     this.name = name;

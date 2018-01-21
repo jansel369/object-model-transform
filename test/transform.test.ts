@@ -2,9 +2,9 @@ import Model from '../lib/Model';
 import transform, { ITransformSchema, modelTransform } from '../lib/transform';
 
 describe('transform', () => {
-    class Person extends Model {};
-    class Animal extends Model {};
-    class Item extends Model {};
+    class Person extends Model { };
+    class Animal extends Model { };
+    class Item extends Model { };
 
     it('transforms basic object to a model', () => {
         const obj = {
@@ -51,7 +51,7 @@ describe('transform', () => {
         expect(res[1]).toBeInstanceOf(Person);
         expect(res[2]).toBeInstanceOf(Person);
     });
-    
+
     it('ignores non-object element in array', () => {
         const arr = [
             {
@@ -84,7 +84,7 @@ describe('transform', () => {
 
     it('transforms multiple nested property with array or object value', () => {
         const arr = [
-            {   
+            {
                 name: 'Doms',
                 pet: {
                     name: 'Brench',
@@ -136,7 +136,6 @@ describe('transform', () => {
         };
 
         const res = transform(arr, schema);
-
         expect(res[0]).toBeInstanceOf(Person);
         expect(res[0].pet).toBeInstanceOf(Animal);
         expect(res[1]).toBeInstanceOf(Person);
@@ -148,8 +147,8 @@ describe('transform', () => {
     });
 
     it('transform object in a given dot notation property name', () => {
-        class Computer extends Model {}
-        class Laptop extends Model {};
+        class Computer extends Model { }
+        class Laptop extends Model { };
 
         const obj = {
             name: 'Brent',
@@ -250,6 +249,7 @@ describe('transform', () => {
             multiParam: true,
         }
 
+        const date = transform(Date.now(), { singleParam: true, Model: Date });
         const pcRes1 = transform(pc1, computerSchema);
         expect(pcRes1).toBeInstanceOf(Computer);
         expect(pcRes1.name).toBe(pc1);
@@ -259,24 +259,113 @@ describe('transform', () => {
         expect(pcRes2.name).toBe(pc2[0]);
         expect(pcRes2.brand).toBe(pc2[1]);
         expect(pcRes2.weight).toBe(pc2[2]);
+
+        expect(date).toBeInstanceOf(Date);
     });
 
-    it('throws error for having two "singleTransform" and "multiTransform" at the same time', () => {
-        class Computer {
-            name: string;
-
-            constructor(name: string) {
-                this.name = name;
+    it('uses onTransform function as the highest with the highest precedence', () => {
+        const arr = [
+            {
+                name: 'Doms',
+                pet: {
+                    name: 'Brench',
+                },
+            },
+            {
+                name: 'Pat',
+                pet: {
+                    name: 'Li',
+                    collars: [
+                        {
+                            color: 'red',
+                        },
+                        {
+                            color: 'pink',
+                            name: 'I love TS',
+                        }
+                    ]
+                },
+                pocket: {
+                    money: {
+                        amount: 500000000,
+                    },
+                    card: 'ATM',
+                },
+                sayings: 'I am Rick now!',
             }
+        ];
+        const schema: ITransformSchema = {
+            Model: Person,
+            include: [
+                {
+                    field: 'pet',
+                    Model: Animal,
+                    onTransform: (Model, data, parent, root) => {
+                        return new Model(data);
+                    },
+                    include: {
+                        field: 'collars',
+                        Model: Item,
+                        onTransform: (Model, data, parent, root) => {
+                            return new Model(data);
+                        },
+                    }
+                },
+                {
+                    field: 'pocket',
+                    Model: Item,
+                    include: {
+                        field: 'money',
+                        Model: Item,
+                        onTransform: (Model, data, prent, root) => {
+                            return new Model(data);
+                        },
+                    },
+                },
+            ],
+        };
+        const res = transform(arr, schema);
+        expect(res[0]).toBeInstanceOf(Person);
+        expect(res[0].pet).toBeInstanceOf(Animal);
+        expect(res[1]).toBeInstanceOf(Person);
+        expect(res[1].pet).toBeInstanceOf(Animal);
+        expect(res[1].pet.collars[0]).toBeInstanceOf(Item);
+        expect(res[1].pet.collars[1]).toBeInstanceOf(Item);
+        expect(res[1].pocket).toBeInstanceOf(Item);
+        expect(res[1].pocket.money).toBeInstanceOf(Item);
+    })
+
+    it('uses onTransform that customise its data', () => {
+        class CustomPerson {
+            petName: string;
+
+            constructor(person, petName) {
+                Object.assign(this, person);
+                this.petName = petName;
+            };
         }
 
-        const invalidSchema: ITransformSchema = {
-            multiParam: true,
-            singleParam: true,
-            Model: Computer,
-        }
+        const data = {
+            person: {
+                name: 'Karl',
+                age: 33,
+            },
+            pet: {
+                name: 'carl',
+            },
+        };
+        const schema = {
+            include: {
+                field: 'person',
+                onTransform: (Model, data, parent, root) => {
+                    return new CustomPerson(data, root.pet.name);
+                }
+            },
+        };
 
-        expect(() => transform('pc1', invalidSchema)).toThrow();
+        const res = transform(data, schema);
+        expect(res.person).toBeInstanceOf(CustomPerson);
+        expect(res.person.petName).toBe(data.pet.name);
     });
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "object-model-transform",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Transforms objects and its object property into model.",
   "main": "index.js",
   "author": "Dianzel Gulmatico",
@@ -15,7 +15,10 @@
   },
   "keywords": [
     "oop",
-    "transformer"
+    "transformer",
+    "transform",
+    "object",
+    "data manipulation"
   ],
   "scripts": {
     "test": "jest",

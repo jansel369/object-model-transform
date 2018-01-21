@@ -4,15 +4,20 @@ declare class Model {
 
 declare function transform<T = any>(obj: any, schema: ITransformSchema ): T;
 
+interface IOntransform {
+    (Model, data, parent, root): any;
+}
+
 interface ITransformSchema {
     field?: string;
     Model?: any;
-    include?: IncludeSchema | IncludeSchema[];
+    include?: IIncludeSchema | IIncludeSchema[];
     singleParam?: boolean;
     multiParam?: boolean;
+    onTransform?: IOntransform;
 }
 
-interface IncludeSchema extends ITransformSchema {
+interface IIncludeSchema extends ITransformSchema {
     field: string;
 }
 
@@ -20,4 +25,6 @@ export {
     Model,
     transform,
     ITransformSchema,
+    IIncludeSchema,
+    IOntransform,
 }
